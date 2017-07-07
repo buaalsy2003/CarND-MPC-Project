@@ -2,6 +2,28 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+# Model
+This project is to build a Motion Predictive Controller(MPC). I used the kinematic model without internal forces:
+* x1 = x0 + v0 * cos(psi0) * dt
+* y1 = y0 + v0 * sin(psi0) * dt
+* psi1 = psi0 + (v0 / Lf) * delta0 * dt
+* v1 = v0 + a0 * dt
+* cte1 = f(x0) - y0 + v0 * sin(psi0) * dt
+* epsi1 = psi0 - arctan(f'(x0)) + (v / Lf) * delta0 * dt
+
+The simulator states:
+* x: position x
+* y: position y
+* psi: current vehicle speed
+* v: current vehicle speed
+
+The Actuators:
+* cte:  cross track error
+* epsi: psi error
+
+
+
+
 
 ## Dependencies
 
