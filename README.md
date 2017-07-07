@@ -38,11 +38,13 @@ Eventually the weights of all components in the cost function were set in MPC.h 
 * const int kas  = 10;
 
 To make the driving easier, the desired driving speed was set to 75. This can be changed to a higher value but the model will become more sensitive to weights. 
-* const double ref_v = 75;;
+* const double ref_v = 75;
 
 # Latency
-In this simulator, the latency is 100 ms, which is 2 dt timesteps. We need consider the latency delays in order to keep the simulated vehicle in a predictable state. To do so, I added the constraints for the duration of latency. The actuations values of previous iteration were stored and applied for the duration of latency; this ensures that actuations are smooth, and optimal trajectory is calculated starting from time after the latency.
+The simulator has a latency of 100 ms, which is 2dt timesteps. We have to consider the latency delays in order to keep the simulated vehicle in a predictable state. To do so, I added the constraints for the duration of latency. Previous actuations values were stored and applied during the latency, which ensures that actuations are smooth and optimal trajectory is calculated from time after the latency.
 
+# Result
+![Result](LtIBglLk3u.gif "Result")
 ----------------------------------------------------------------------------------------
 ## Dependencies
 
