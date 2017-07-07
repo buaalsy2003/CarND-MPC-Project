@@ -23,15 +23,15 @@ double dt = 0.05;
 const double Lf = 2.67;
 
 // Both the reference cross track and orientation errors are 0.
-// The reference velocity is set to 40 mph.
+// The reference velocity is set to 75 mph.
 const double ref_cte = 0;
 const double ref_epsi = 0;
-const double ref_v = 30;
+const double ref_v = 60;
 
-const int kd   = 1.0;
-const int ka       = 10;  
-const int kds      = 400;
-const int kas 			= 1;
+const int kd   = 1;
+const int ka   = 10;  
+const int kds  = 800;
+const int kas  = 10;
 
 size_t x_start = 0;
 size_t y_start = x_start + N;
@@ -182,7 +182,7 @@ Results MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   vars[psi_start] = psi;
   vars[v_start] = v;
   vars[cte_start] = cte;
-	vars[epsi_start] = epsi;
+  vars[epsi_start] = epsi;
 
   Dvector vars_lowerbound(n_vars);
   Dvector vars_upperbound(n_vars);
@@ -239,7 +239,7 @@ Results MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   constraints_upperbound[psi_start] = psi;
   constraints_upperbound[v_start] = v;
   constraints_upperbound[cte_start] = cte;
-	constraints_upperbound[epsi_start] = epsi;
+  constraints_upperbound[epsi_start] = epsi;
 
   // object that computes objective and constraints
  	//vector<double> actuation_history = { delta_previous, acc_previous};
@@ -277,15 +277,11 @@ Results MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   Results ret; 
   for (auto k = 0; k < N - 1; k++) {
     // we really only need these four values for Simulator
-    ret.X.push_back(solution.x[x_start + k]);   
-    ret.Y.push_back(solution.x[y_start + k]);
-    ret.Delta.push_back(solution.x[delta_start + k]); 
-    ret.A.push_back(solution.x[a_start + k]);        
-    //ret.Psi.push_back(solution.x[psi_start + k]);
-    //ret.V.push_back(solution.x[v_start + k]);
-    //ret.CTE.push_back(solution.x[cte_start + k]);
-    //ret.EPsi.push_back(solution.x[epsi_start + k]);
-	}
+      ret.X.push_back(solution.x[x_start + k]);
+      ret.Y.push_back(solution.x[y_start + k]);
+      ret.Delta.push_back(solution.x[delta_start + k]);
+      ret.A.push_back(solution.x[a_start + k]);
+  }
 
   // Cost
   auto cost = solution.obj_value;
@@ -296,19 +292,5 @@ Results MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
-  /*vector<double> result;
-    
-  result.push_back(solution.x[delta_start]);
-  result.push_back(solution.x[a_start]);
-    
-  for (int i = 0; i < N - 1 ; i++)
-  {
-        result.push_back(solution.x[x_start + i + 1]);
-        result.push_back(solution.x[y_start + i + 1]);
-	}
-  return result{solution.x[x_start + 1],   solution.x[y_start + 1],
-          solution.x[psi_start + 1], solution.x[v_start + 1],
-          solution.x[cte_start + 1], solution.x[epsi_start + 1],
-					solution.x[delta_start], solution.x[a_start]};*/
-	return ret;
+    return ret;
 }

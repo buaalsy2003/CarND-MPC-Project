@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// Result from the Solver
+// A wrapper struct for results return from the Solver
 struct Results {
     vector<double>  X;      // X coordinate
     vector<double>  Y;      // Y coordinate
@@ -24,9 +24,9 @@ class MPC {
 
   virtual ~MPC();
 
-	int latency_dt {2};
+  int latency_dt {2};
   double delta_previous {0};
-	double acc_previous {0.1};
+  double acc_previous {0.1};
 
   // Solve the model given an initial state and polynomial coefficients.
   // Return the first actuatotions.

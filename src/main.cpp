@@ -112,42 +112,7 @@ int main() {
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
 
- /*         int n               = ptsx.size();
-          double steer_angle  = j[1]["steering_angle"];
-            
-          for (int i =0; i < n; i++)
-          {
-              double shift_x = ptsx[i] - px;
-              double shift_y = ptsy[i] - py;
-              
-              // Transalte to car coordinates 
-              ptsx[i] = (shift_x * cos(0-psi) - shift_y * sin(0-psi));
-              ptsy[i] = (shift_x * sin(0-psi) + shift_y * cos(0-psi));
-          }
-
-          double* ptrx          = &ptsx[0];
-          Eigen::Map<Eigen::VectorXd> ptsx_xform(ptrx, 6);
-            
-          double* ptry          = &ptsy[0];
-          Eigen::Map<Eigen::VectorXd> ptsy_xform(ptry, 6);
-            
-          auto coeffs           = polyfit(ptsx_xform, ptsy_xform, 3);
-           
-          // Account for latency
-          const double latency = 0.1;  // 100 ms
-          const double Lf = 2.67;
-            
-          px = v * latency;
-          psi = - v * steer_angle / Lf * latency ;
-          
-          // Calculate cte and epsi
-          double cte            = polyeval(coeffs, 0); // y value
-          double epsi           = -atan(coeffs[1]);
-        
-          Eigen::VectorXd state(6);
-          state << px, py, psi, v, cte, epsi;
- */
-
+ 
           Eigen::MatrixXd waypoints = transformGlobalToLocal(px,py,psi,ptsx,ptsy);
           Eigen::VectorXd Ptsx = waypoints.row(0);
           Eigen::VectorXd Ptsy = waypoints.row(1);
@@ -159,7 +124,7 @@ int main() {
           double cte = polyeval(coeffs, 0);
           
           // get orientation error from fit
-					double epsi = -atan(coeffs[1]);
+          double epsi = -atan(coeffs[1]);
            
           // state in vehicle coordinates: x,y and orientation are always zero
           Eigen::VectorXd state(6);
@@ -170,9 +135,9 @@ int main() {
           
           double steer_value = sol.Delta[2];
           double throttle_value= sol.A[2];
+            
           mpc.delta_previous = steer_value;
-					mpc.acc_previous = throttle_value;
-
+          mpc.acc_previous = throttle_value;
 
 
           /*
