@@ -21,10 +21,15 @@ The Actuators:
 * cte:  cross track error
 * epsi: psi error
 
+# Parameters (N and dt)
+We need to fine tune the two parameters in this model.
+N is number of timesteps and dt is the timeperiod delta. The MPC model works by creating a reference trajectory for T seconds ahead on the horizon of its current position (T = N * dt). Larger T means longer horizon and smoother changes over time, but also larger deviations in tracking as horizons can change dramatically; smaller T means shorter horizons, more responsive and accurate, but more discrete changes. 
+I started with small values of N = 15 and dt = 0.02. Then I gradually increase the N and dt, I settled down to N = 20 and dt = 0.05, with velocity slowly increasing from ~30 mph to 75 mph.
 
+# Latency
+In this simulator, the latency is 100 ms, which is 2 dt timesteps. We need consider the latency delays in order to keep the simulated vehicle in a predictable state. To do so, I added the constraints for the duration of latency. The actuations values of previous iteration were stored and applied for the duration of latency; this ensures that actuations are smooth, and optimal trajectory is calculated starting from time after the latency.
 
-
-
+----------------------------------------------------------------------------------------
 ## Dependencies
 
 * cmake >= 3.5
