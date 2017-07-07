@@ -34,10 +34,11 @@ The weights of each component in cost function is important to the final optimal
 Eventually the weights of all components in the cost function were set in MPC.h as follows:
 * const int kd   = 1;
 * const int ka   = 10;  
-* const int kds  = 400;
-* const int kas  = 1;
-To make the driving easier, the desired driving speed was set to 30. This can be changed to a higher value but the weights may need to be adjusted to handle the more fragile system.
-* const double ref_v = 30;;
+* const int kds  = 800;
+* const int kas  = 10;
+
+To make the driving easier, the desired driving speed was set to 75. This can be changed to a higher value but the model will become more sensitive to weights. 
+* const double ref_v = 75;;
 
 # Latency
 In this simulator, the latency is 100 ms, which is 2 dt timesteps. We need consider the latency delays in order to keep the simulated vehicle in a predictable state. To do so, I added the constraints for the duration of latency. The actuations values of previous iteration were stored and applied for the duration of latency; this ensures that actuations are smooth, and optimal trajectory is calculated starting from time after the latency.
