@@ -26,6 +26,19 @@ We need to fine tune the two parameters in this model.
 N is number of timesteps and dt is the timeperiod delta. The MPC model works by creating a reference trajectory for T seconds ahead on the horizon of its current position (T = N * dt). Larger T means longer horizon and smoother changes over time, but also larger deviations in tracking as horizons can change dramatically; smaller T means shorter horizons, more responsive and accurate, but more discrete changes. 
 I started with small values of N = 15 and dt = 0.02. Then I gradually increase the N and dt, I settled down to N = 20 and dt = 0.05, with velocity slowly increasing from ~30 mph to 75 mph.
 
+# Polynomial Fitting and MPC Preprocessing
+All the points was first converted to and then calculated under the vehicle coordinate system using function (transformGlobalToLocal).
+Then using the fitted poly and the vehicle state, I called the solver to minimize the cost function over time.
+The cost function consists of amplitude of cte, velocity difference, steering angle, throttle value and the derivatives of steering angle and throttle value.
+The weights of each component in cost function is important to the final optimal soluation. To make the vehicle driving smoother, I assigned a large weight to the derivative of steering angle.
+Eventually the weights of all components in the cost function were set in MPC.h as follows:
+* const int kd   = 1;
+* const int ka   = 10;  
+* const int kds  = 400;
+* const int kas  = 1;
+To make the driving easier, the desired driving speed was set to 30. This can be changed to a higher value but the weights may need to be adjusted to handle the more fragile system.
+* const double ref_v = 30;;
+
 # Latency
 In this simulator, the latency is 100 ms, which is 2 dt timesteps. We need consider the latency delays in order to keep the simulated vehicle in a predictable state. To do so, I added the constraints for the duration of latency. The actuations values of previous iteration were stored and applied for the duration of latency; this ensures that actuations are smooth, and optimal trajectory is calculated starting from time after the latency.
 
